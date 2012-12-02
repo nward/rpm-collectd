@@ -41,6 +41,7 @@ BuildRequires: iptables-devel
 BuildRequires: liboping-devel
 BuildRequires: python-devel
 BuildRequires: libgcrypt-devel
+BuildRequires: librabbitmq-devel
 %if 0%{?fedora} >= 15
 Requires(post):   systemd-units
 Requires(preun):  systemd-units
@@ -63,6 +64,12 @@ Requires:      collectd = %{version}-%{release}
 %description apache
 This plugin collects data provided by Apache's 'mod_status'.
 
+%package amqp
+Summary:       AMQP plugin for collectd
+Group:         System Environment/Daemons
+Requires:      collectd = %{version}-%{release}
+%description amqp
+This plugin collects data from AMQP with the RabbitMQ client.
 
 %package dns
 Summary:       DNS traffic analysis module for collectd
@@ -220,6 +227,7 @@ sed -i.orig -e 's|-Werror||g' Makefile.in */Makefile.in
     --disable-xmms \
     --disable-zfs_arc \
     --enable-apache \
+    --enable-amqp \
     --enable-apcups \
     --enable-battery \
     --enable-bind \
@@ -560,6 +568,11 @@ fi
 %defattr(-, root, root, -)
 %{_libdir}/collectd/apache.so
 %config(noreplace) %{_sysconfdir}/collectd.d/apache.conf
+
+
+%files amqp
+%defattr(-, root, root, -)
+%{_libdir}/collectd/amqp.so
 
 
 %files dns
